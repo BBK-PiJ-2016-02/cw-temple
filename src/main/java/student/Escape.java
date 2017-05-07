@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Escape {
 
-  EscapeState state;
+  private EscapeState state;
 
   /**
    * Init Escape instance
@@ -29,7 +29,7 @@ public class Escape {
     }
   }
 
-  public Collection<Node> getNeighbours() {
+  private  Collection<Node> getNeighbours() {
     return state.getCurrentNode().getNeighbours();
   }
 
@@ -38,7 +38,7 @@ public class Escape {
    *
    * @return random neighbour
    */
-  public Node getRandomNeighbour() {
+  private Node getRandomNeighbour() {
     Collection<Node> neighbours = getNeighbours();
 
     if(!neighbours.isEmpty()) {
@@ -59,7 +59,7 @@ public class Escape {
   /**
    * Looks for (and takes) any gold on the current node
    */
-  public void lookForGold() {
+  private void lookForGold() {
     Tile tile = state.getCurrentNode().getTile();
 
     if(tile.getGold() > 0) {

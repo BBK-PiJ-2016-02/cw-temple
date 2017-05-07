@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Explore {
 
-  ExplorationState state;
+  private ExplorationState state;
 
   /**
    * Init Explore instance
@@ -32,7 +32,7 @@ public class Explore {
    *
    * @return random neighbour
    */
-  public NodeStatus getRandomNeighbour() {
+  private NodeStatus getRandomNeighbour() {
     Collection<NodeStatus> neighbours = state.getNeighbours();
 
     if(!neighbours.isEmpty()) {
