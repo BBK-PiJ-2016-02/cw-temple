@@ -18,7 +18,7 @@ public class Explore {
   /**
    * Keeps track of current path
    */
-  private Stack<NodeStatus> pathHistory;
+  private Stack<Long> pathHistory;
 
   /**
    * Init Explore instance
@@ -70,17 +70,12 @@ public class Explore {
    * @return random unvisited neighbour
    */
   private NodeStatus backtrackToUnvisitedNeighbour() {
-    NodeStatus previousNode = this.pathHistory.pop();
     NodeStatus unvisitedNeighbour = null;
 
     do {
-      previousNode = this.pathHistory.pop();
-      this.state.moveTo(previousNode.getId());
+      this.state.moveTo(this.pathHistory.pop());
       unvisitedNeighbour = getRandomUnvisitedNeighbour();
     } while(unvisitedNeighbour == null);
-
-    // Restore the last node, as we're sticking put for the mean time
-    this.pathHistory.push(previousNode);
 
     return unvisitedNeighbour;
   }
@@ -91,9 +86,9 @@ public class Explore {
    * @param NodeStatus neighbour to move to
    */
   private void moveToNeighbour(NodeStatus neighbour) {
+    this.pathHistory.push(this.state.getCurrentLocation());
     state.moveTo(neighbour.getId());
     this.visitedNodes.add(neighbour);
-    this.pathHistory.push(neighbour);
   }
 
   /**
