@@ -49,22 +49,6 @@ public class Explore {
   }
 
   /**
-   * Get a random neighbour on the current state
-   *
-   * @return random neighbour
-   */
-  private NodeStatus getRandomNeighbour() {
-    Collection<NodeStatus> neighbours = state.getNeighbours();
-    NodeStatus randomNeighbour = randomNeighbour(neighbours);
-
-    if(randomNeighbour == null) {
-      throw new IllegalStateException("We are trapped.");
-    }
-
-    return randomNeighbour;
-  }
-
-  /**
    * Get a random neighbour on the current state that we haven't yet visited
    *
    * @return random unvisited neighbour or null if there aren't any
@@ -86,7 +70,19 @@ public class Explore {
    * @return random unvisited neighbour
    */
   private NodeStatus backtrackToUnvisitedNeighbour() {
-    return null;
+    NodeStatus previousNode = this.pathHistory.pop();
+    NodeStatus unvisitedNeighbour = null;
+
+    do {
+      previousNode = this.pathHistory.pop();
+      this.state.moveTo(previousNode.getId());
+      unvisitedNeighbour = getRandomUnvisitedNeighbour();
+    } while(unvisitedNeighbour == null);
+
+    // Restore the last node, as we're sticking put for the mean time
+    this.pathHistory.push(previousNode);
+
+    return unvisitedNeighbour;
   }
 
   /**
@@ -109,7 +105,6 @@ public class Explore {
    */
   private NodeStatus randomNeighbour(Collection<NodeStatus> neighbours) {
     if (!neighbours.isEmpty()) {
-      System.out.println(neighbours.size());
       int randomNeighbour = new Random().nextInt(neighbours.size());
       int neighbourI = 0;
 
