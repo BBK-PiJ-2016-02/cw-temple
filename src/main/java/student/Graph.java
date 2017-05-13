@@ -1,5 +1,7 @@
 package student;
 
+import game.*;
+
 public class Graph {
 
     /**
@@ -8,11 +10,18 @@ public class Graph {
     private GraphNode rootNode;
 
     /**
+     * The target Node
+     */
+    private GraphNode targetNode;
+
+    /**
      * Graph Constructor
      *
-     * @param  rootNode The root GraphNode instance
+     * @param  rootNode   The root Node instance
+     * @param  targetNode The target Node instance
      */
-    public Graph(GraphNode rootNode) {
-        this.rootNode = rootNode;
+    public Graph(Node rootNode, Node targetNode) {
+        this.rootNode = new GraphNode(rootNode);
+        this.targetNode = new GraphNode(targetNode);
     }
 }
