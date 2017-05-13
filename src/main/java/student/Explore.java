@@ -21,7 +21,7 @@ public class Explore {
    */
   public void go() {
     while(state.getDistanceToTarget() != 0) {
-      goToNeighbour(
+      moveToNeighbour(
         getRandomNeighbour()
       );
     }
@@ -51,11 +51,11 @@ public class Explore {
   }
 
   /**
-   * Go to specified neighbour
+   * Move to specified neighbour
    *
-   * @param NodeStatus neighbour to go to
+   * @param NodeStatus neighbour to move to
    */
-  private void goToNeighbour(NodeStatus neighbour) {
+  private void moveToNeighbour(NodeStatus neighbour) {
     state.moveTo(neighbour.getId());
   }
 }

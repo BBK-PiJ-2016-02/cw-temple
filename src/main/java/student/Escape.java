@@ -23,7 +23,7 @@ public class Escape {
     while(!state.getCurrentNode().equals(state.getExit())) {
       lookForGold();
 
-      goToNeighbour(
+      moveToNeighbour(
         getRandomNeighbour()
       );
     }
@@ -68,11 +68,11 @@ public class Escape {
   }
 
   /**
-   * Go to specified neighbour
+   * Move to specified neighbour
    *
-   * @param Node neighbour to go to
+   * @param Node neighbour to move to
    */
-  private void goToNeighbour(Node neighbour) {
+  private void moveToNeighbour(Node neighbour) {
     state.moveTo(neighbour);
   }
 }
