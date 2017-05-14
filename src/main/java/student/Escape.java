@@ -23,13 +23,13 @@ public class Escape {
    * Escape the cavern
    */
   public void go() {
-    Graph graph = new Graph(
+    RouteFinder routeFinder = new RouteFinder(
       state.getCurrentNode(),
       state.getExit(),
       state.getVertices()
     );
 
-    Stack<GraphNode> shortestRoute = graph.getShortestRoute();
+    Stack<GraphNode> shortestRoute = routeFinder.getShortestRoute();
     GraphNode nextGraphNode;
 
     while(!state.getCurrentNode().equals(state.getExit())) {
