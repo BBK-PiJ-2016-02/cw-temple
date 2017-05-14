@@ -11,11 +11,6 @@ public class GraphNode {
   private Node node;
 
   /**
-   * Has this node been visited
-   */
-  private boolean isVisited = false;
-
-  /**
    * Distance between this node and the root node
    */
   private int distance = Integer.MAX_VALUE;
@@ -58,20 +53,6 @@ public class GraphNode {
    */
   public Collection<Node> getNeighbours() {
     return this.node.getNeighbours();
-  }
-
-  /**
-   * Mark the node as visited
-   */
-  public void markVisited() {
-    this.isVisited = true;
-  }
-
-  /**
-   * Has the node been visited
-   */
-  public boolean isVisited() {
-    return this.isVisited;
   }
 
   /**

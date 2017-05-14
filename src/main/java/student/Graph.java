@@ -6,125 +6,161 @@ import java.util.*;
 public class Graph {
 
     /**
-     * The root GraphNode
+     * The source Node Id
      */
-    private GraphNode rootNode;
+    private Long sourceNodeId;
 
     /**
-     * The target Node
+     * The target Node Id
      */
-    private GraphNode targetNode;
+    private Long targetNodeId;
 
     /**
-     * Nodes we have visited
+     * All nodes
      */
-    private Map<Long, GraphNode> visitedNodes;
+    private Map<Long, GraphNode> allNodes;
 
     /**
      * Graph Constructor
      *
-     * @param  rootNode   The root Node instance
+     * @param  sourceNode   The source Node instance
      * @param  targetNode The target Node instance
+     * @param  allNodes   All Node instances in graph
      */
-    public Graph(Node rootNode, Node targetNode) {
-        this.rootNode = new GraphNode(rootNode);
-        this.targetNode = new GraphNode(targetNode);
-        this.visitedNodes = new HashMap<>();
-
-        this.targetNode.setDistance(0);
-        this.buildGraph(this.targetNode);
-        // this.calculateShortestRoute();
+    public Graph(Node sourceNode, Node targetNode, Collection<Node> allNodes) {
+        this.sourceNodeId = sourceNode.getId();
+        this.targetNodeId = targetNode.getId();
+        this.allNodes = new HashMap<>();
+        this.buildGraph(allNodes);
     }
 
     /**
-     * Constructs a graph implementing Dijkstra's Algorithm
+     * Constructs a graph
      *
-     * @param startNode GraphNode to start building from
+     * @param nodes All the nodes in the graph
      */
-    private void buildGraph(GraphNode startNode) {
+    private void buildGraph(Collection<Node> nodes) {
 
-        if(!startNode.isVisited()) {
-            // Build up child GraphNodes on startNode
-            Collection<Node> neighbours = startNode.getNeighbours();
-
-            for (Node neighbour : neighbours) {
-                GraphNode nextNode = this.visitNode(neighbour);
-                startNode.addChildNode(nextNode);
-            }
-
-            startNode.markVisited();
+        // Create and store a GraphNode for all nodes
+        for(Node node : nodes) {
+            GraphNode graphNode = new GraphNode(node);
+            this.allNodes.put(graphNode.getId(), graphNode);
         }
 
-        // Distance between nodes is hardcoded to 1, as we're working with a uniform grid
-        Integer distance = startNode.getDistance() + 1;
-        Collection<GraphNode> childNodes = startNode.getChildNodes();
-
-        // Update the shortest distance for each child node
-        for (GraphNode childNode : childNodes) {
-            if(distance < childNode.getDistance()) {
-                childNode.setDistance(distance);
-            }
-
-            buildGraph(childNode);
+        // Link the children of each GraphNode to it's parent
+        for(GraphNode node : this.allNodes.values()) {
+            this.linkChildren(node);
         }
-
-        this.visitedNodes.put(startNode.getId(), startNode);
     }
 
     /**
-     * Visits a node, returns existing associated GraphNode or creates a new one
+     * Find and link the children of a GraphNode
      *
-     * @param  node Node to visit
-     *
-     * @return Associated GraphNode for Node instance
+     * @param node The GraphNode that is looking for it's children
      */
-    private GraphNode visitNode(Node node) {
-        Long nodeId = node.getId();
-
-        if(this.visitedNodes.containsKey(nodeId)) {
-            return this.visitedNodes.get(nodeId);
+    private void linkChildren(GraphNode node) {
+        Collection<Node> neighbours = node.getNeighbours();
+        for(Node neighbour : neighbours) {
+            GraphNode childNode = this.allNodes.get(neighbour.getId());
+            node.addChildNode(childNode);
         }
-
-        GraphNode graphNode = new GraphNode(node);
-        this.visitedNodes.put(nodeId, graphNode);
-
-        return graphNode;
     }
 
     /**
-     * Get the shortest route to the exit
+     * Get the shortest route to the exit using Dijkstra's Algorithm
      *
      * @return shortest route
      */
     public Stack<GraphNode> getShortestRoute() {
-        Stack<GraphNode> route = new Stack<>();
-        GraphNode currentNode = this.rootNode;
-        Collection<GraphNode> childNodes;
 
+        // Nodes to visit
+        Set<GraphNode> visitQueue = new HashSet<>();
+        // Nodes that have been visited
+        Set<GraphNode> visitedNodes = new HashSet<>();
+
+        // Start with the source
+        GraphNode sourceNode = this.allNodes.get(this.sourceNodeId);
+        sourceNode.setDistance(0);
+        visitQueue.add(sourceNode);
+
+        // Visit nodes
         do {
-            childNodes = currentNode.getChildNodes();
-            currentNode = null;
+            GraphNode node = this.getClosestNode(visitQueue);
+            visitedNodes.add(node);
+            visitQueue.remove(node);
 
-            for (GraphNode childNode : childNodes) {
-                if(
-                    currentNode != null &&
-                    childNode.getDistance() < currentNode.getDistance()
-                ) {
-                    currentNode = childNode;
+            // Distance between nodes is hardcoded to 1, as we're working with a uniform grid
+            Integer distance = node.getDistance() + 1;
+
+            for(GraphNode childNode : node.getChildNodes()) {
+                // Skip visited nodes
+                if(!visitedNodes.contains(childNode)) {
+
+                    // Have we found a shorter route to this particular node?
+                    if(childNode.getDistance() > distance) {
+                        childNode.setDistance(distance);
+
+                        // Queue up to check/recheck the children of this childNode
+                        visitQueue.add(childNode);
+                    }
                 }
             }
+        } while (!visitQueue.isEmpty());
+
+        // Calculate shortest path
+        Stack<GraphNode> route = new Stack<>();
+        GraphNode currentNode = this.allNodes.get(this.targetNodeId);
+        while(currentNode.getId() != this.sourceNodeId) {
+
+            currentNode = this.getClosestNode(
+                this.getNeighbours(currentNode)
+            );
 
             if(currentNode == null) {
                 throw new IllegalStateException("Cannot locate path to target node");
             }
 
             route.push(currentNode);
-        } while (!currentNode.equals(this.targetNode));
+        }
 
         return route;
     }
 
-    // private void calculateShortestRoute() {
+    /**
+     * Returns the neighbours of the GraphNode by looking at the underlying Node instance
+     *
+     * @param  node The GraphNode to insspect
+     *
+     * @return The neighbours of the node
+     */
+    private Collection<GraphNode> getNeighbours(GraphNode node) {
+        Collection<GraphNode> neighbours = new ArrayList<>();
 
-    // }
+        for(Node neighbour : node.getNeighbours()) {
+            neighbours.add(
+                this.allNodes.get(neighbour.getId())
+            );
+        }
+
+        return neighbours;
+    }
+
+    /**
+     * Returns the GraphNode with the lowest distance unit
+     *
+     * @param  nodes GraphNodes to filter for the lowest distance unit
+     *
+     * @return closest node
+     */
+    private GraphNode getClosestNode(Collection<GraphNode> nodes) {
+        GraphNode closestNode = null;
+
+        for(GraphNode node : nodes) {
+            if(closestNode == null || closestNode.getDistance() > node.getDistance()) {
+                closestNode = node;
+            }
+        }
+
+        return closestNode;
+    }
 }
