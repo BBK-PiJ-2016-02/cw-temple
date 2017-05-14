@@ -35,18 +35,15 @@ public class Escape {
    * Escape the cavern
    */
   public void go() {
-    Node targetNode;
+    Graph graph = new Graph(state.getCurrentNode(), state.getExit());
+    Stack<GraphNode> shortestRoute = graph.getShortestRoute();
+    GraphNode nextGraphNode;
 
     while(!state.getCurrentNode().equals(state.getExit())) {
       lookForGold();
 
-      targetNode = getRandomUnvisitedNeighbour();
-
-      if(targetNode == null) {
-        targetNode = backtrackToUnvisitedNeighbour();
-      }
-
-      moveToNeighbour(targetNode);
+      nextGraphNode = shortestRoute.pop();
+      state.moveTo(nextGraphNode.getNode());
     }
   }
 

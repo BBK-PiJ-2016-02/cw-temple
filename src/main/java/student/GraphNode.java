@@ -1,6 +1,7 @@
 package student;
 
 import game.*;
+import java.util.*;
 
 public class GraphNode {
 
@@ -20,12 +21,18 @@ public class GraphNode {
   private int distance = Integer.MAX_VALUE;
 
   /**
+   * Child nodes of this node
+   */
+  private Map<Long, GraphNode> childNodes;
+
+  /**
    * GraphNode Constructor
    *
    * @param  node The underlying Node instance
    */
   public GraphNode(Node node) {
     this.node = node;
+    this.childNodes = new HashMap<>();
   }
 
   /**
@@ -33,6 +40,24 @@ public class GraphNode {
    */
   public long getId() {
     return this.node.getId();
+  }
+
+  /**
+   * Return the underlying Node instance
+   *
+   * @return node
+   */
+  public Node getNode() {
+    return this.node;
+  }
+
+  /**
+   * Returns neighbours from the underlying Node instance
+   *
+   * @return Collection of neighbour nodes
+   */
+  public Collection<Node> getNeighbours() {
+    return this.node.getNeighbours();
   }
 
   /**
@@ -65,5 +90,27 @@ public class GraphNode {
    */
   public void setDistance(int distance) {
     this.distance = distance;
+  }
+
+  /**
+   * Attach a child node
+   *
+   * @param node to attach
+   */
+  public void addChildNode(GraphNode node) {
+    this.childNodes.put(node.getId(), node);
+  }
+
+  /**
+   * Get all child nodes attached to this node
+   *
+   * @return collection of child nodes
+   */
+  public Collection<GraphNode> getChildNodes() {
+    Collection<GraphNode> childNodes = new ArrayList<>(
+      this.childNodes.values()
+    );
+
+    return childNodes;
   }
 }
