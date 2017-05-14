@@ -113,7 +113,6 @@ public class Graph {
 
         do {
             route.push(currentNode);
-            routeList.add(currentNode);
 
             currentNode = this.getClosestNode(
                 this.getNeighbours(currentNode)
