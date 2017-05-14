@@ -10,22 +10,22 @@ import java.util.Stack;
 public class Explore {
 
   /**
-   * Contains the current game state
+   * Contains the current game state.
    */
   private ExplorationState state;
 
   /**
-   * Keeps track of all visited nodes
+   * Keeps track of all visited nodes.
    */
   private HashSet<NodeStatus> visitedNodes;
 
   /**
-   * Keeps track of current path
+   * Keeps track of current path.
    */
   private Stack<Long> pathHistory;
 
   /**
-   * Init Explore instance
+   * Init Explore instance.
    *
    * @param  state Starting state to explore from
    */
@@ -36,15 +36,15 @@ public class Explore {
   }
 
   /**
-   * Explore the cavern
+   * Explore the cavern.
    */
   public void go() {
     NodeStatus targetNode;
 
-    while(state.getDistanceToTarget() != 0) {
+    while (state.getDistanceToTarget() != 0) {
       targetNode = getRandomUnvisitedNeighbour();
 
-      if(targetNode == null) {
+      if (targetNode == null) {
         targetNode = backtrackToUnvisitedNeighbour();
       }
 
@@ -53,7 +53,7 @@ public class Explore {
   }
 
   /**
-   * Get a random neighbour on the current state that we haven't yet visited
+   * Get a random neighbour on the current state that we haven't yet visited.
    *
    * @return random unvisited neighbour or null if there aren't any
    */
@@ -61,15 +61,13 @@ public class Explore {
     Collection<NodeStatus> neighbours = state.getNeighbours();
 
     // Filter out visited neighbours
-    neighbours.removeIf(
-      (NodeStatus neighbour) -> this.visitedNodes.contains(neighbour)
-    );
+    neighbours.removeIf((NodeStatus neighbour) -> this.visitedNodes.contains(neighbour));
 
     return randomNeighbour(neighbours);
   }
 
   /**
-   * Backtrack until we get to a tile with an unvisited neighbour
+   * Backtrack until we get to a tile with an unvisited neighbour.
    *
    * @return random unvisited neighbour
    */
@@ -79,13 +77,13 @@ public class Explore {
     do {
       this.state.moveTo(this.pathHistory.pop());
       unvisitedNeighbour = getRandomUnvisitedNeighbour();
-    } while(unvisitedNeighbour == null);
+    } while (unvisitedNeighbour == null);
 
     return unvisitedNeighbour;
   }
 
   /**
-   * Move to specified neighbour
+   * Move to specified neighbour.
    *
    * @param NodeStatus neighbour to move to
    */
@@ -96,7 +94,7 @@ public class Explore {
   }
 
   /**
-   * Returns a random neighbour from the provided collection
+   * Returns a random neighbour from the provided collection.
    *
    * @param  neighbours Collection of neighbours to select from
    *
@@ -108,7 +106,7 @@ public class Explore {
       int neighbourI = 0;
 
       for (NodeStatus neighbour : neighbours) {
-        if(neighbourI == randomNeighbour) {
+        if (neighbourI == randomNeighbour) {
           return neighbour;
         }
         neighbourI++;

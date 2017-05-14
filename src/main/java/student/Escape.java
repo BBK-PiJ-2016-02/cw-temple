@@ -7,12 +7,12 @@ import java.util.Stack;
 public class Escape {
 
   /**
-   * Contains the current game state
+   * Contains the current game state.
    */
   private EscapeState state;
 
   /**
-   * Init Escape instance
+   * Init Escape instance.
    *
    * @param  state Starting state to explore from
    */
@@ -21,19 +21,19 @@ public class Escape {
   }
 
   /**
-   * Escape the cavern
+   * Escape the cavern.
    */
   public void go() {
     RouteFinder routeFinder = new RouteFinder(
-      state.getCurrentNode(),
-      state.getExit(),
-      state.getVertices()
+        state.getCurrentNode(),
+        state.getExit(),
+        state.getVertices()
     );
 
     Stack<GraphNode> shortestRoute = routeFinder.getShortestRoute();
     GraphNode nextGraphNode;
 
-    while(!state.getCurrentNode().equals(state.getExit())) {
+    while (!state.getCurrentNode().equals(state.getExit())) {
       lookForGold();
 
       nextGraphNode = shortestRoute.pop();
@@ -42,12 +42,12 @@ public class Escape {
   }
 
   /**
-   * Looks for (and takes) any gold on the current node
+   * Looks for (and takes) any gold on the current node.
    */
   private void lookForGold() {
     Tile tile = state.getCurrentNode().getTile();
 
-    if(tile.getGold() > 0) {
+    if (tile.getGold() > 0) {
       state.pickUpGold();
     }
   }

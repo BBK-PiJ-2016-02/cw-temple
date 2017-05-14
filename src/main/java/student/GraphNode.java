@@ -9,22 +9,22 @@ import java.util.Map;
 public class GraphNode {
 
   /**
-   * The underlying Node instance
+   * The underlying Node instance.
    */
   private Node node;
 
   /**
-   * Distance between this node and the root node
+   * Distance between this node and the root node.
    */
   private int distance = Integer.MAX_VALUE;
 
   /**
-   * Child nodes of this node
+   * Child nodes of this node.
    */
   private Map<Long, GraphNode> childNodes;
 
   /**
-   * GraphNode Constructor
+   * GraphNode Constructor.
    *
    * @param  node The underlying Node instance
    */
@@ -41,7 +41,7 @@ public class GraphNode {
   }
 
   /**
-   * Return the underlying Node instance
+   * Return the underlying Node instance.
    *
    * @return node
    */
@@ -50,7 +50,7 @@ public class GraphNode {
   }
 
   /**
-   * Returns neighbours from the underlying Node instance
+   * Returns neighbours from the underlying Node instance.
    *
    * @return Collection of neighbour nodes
    */
@@ -59,7 +59,7 @@ public class GraphNode {
   }
 
   /**
-   * Get the distance between this node and the root node
+   * Get the distance between this node and the root node.
    *
    * @return distance
    */
@@ -68,16 +68,16 @@ public class GraphNode {
   }
 
   /**
-   * Set the distance between this node and the root node
+   * Set the distance between this node and the root node.
    *
-   * @param distance
+   * @param distance distance from root node
    */
   public void setDistance(int distance) {
     this.distance = distance;
   }
 
   /**
-   * Attach a child node
+   * Attach a child node.
    *
    * @param node to attach
    */
@@ -86,14 +86,12 @@ public class GraphNode {
   }
 
   /**
-   * Get all child nodes attached to this node
+   * Get all child nodes attached to this node.
    *
    * @return collection of child nodes
    */
   public Collection<GraphNode> getChildNodes() {
-    Collection<GraphNode> childNodes = new ArrayList<>(
-      this.childNodes.values()
-    );
+    Collection<GraphNode> childNodes = new ArrayList<>(this.childNodes.values());
 
     return childNodes;
   }
