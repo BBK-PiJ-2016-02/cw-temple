@@ -1,7 +1,8 @@
 package student;
 
-import game.*;
-import java.util.*;
+import game.EscapeState;
+import game.Tile;
+import java.util.Stack;
 
 public class Escape {
 

@@ -1,7 +1,10 @@
 package student;
 
-import game.*;
-import java.util.*;
+import game.Node;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GraphNode {
 

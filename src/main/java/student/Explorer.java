@@ -1,8 +1,7 @@
 package student;
 
-import game.*;
-import java.util.*;
-import student.*;
+import game.EscapeState;
+import game.ExplorationState;
 
 public class Explorer {
 

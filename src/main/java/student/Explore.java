@@ -1,7 +1,11 @@
 package student;
 
-import game.*;
-import java.util.*;
+import game.ExplorationState;
+import game.NodeStatus;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Stack;
 
 public class Explore {
 
