@@ -110,7 +110,10 @@ public class Graph {
         // Calculate shortest path
         Stack<GraphNode> route = new Stack<>();
         GraphNode currentNode = this.allNodes.get(this.targetNodeId);
-        while(currentNode.getId() != this.sourceNodeId) {
+
+        do {
+            route.push(currentNode);
+            routeList.add(currentNode);
 
             currentNode = this.getClosestNode(
                 this.getNeighbours(currentNode)
@@ -120,8 +123,7 @@ public class Graph {
                 throw new IllegalStateException("Cannot locate path to target node");
             }
 
-            route.push(currentNode);
-        }
+        } while(currentNode.getId() != this.sourceNodeId);
 
         return route;
     }
